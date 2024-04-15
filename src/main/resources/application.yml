@@ -3,31 +3,25 @@ spring:
     name: multrabbitsb32
   webflux:
     base-path: /api
-  rabbitmq:
-    listener:
-      direct:
-        acknowledge-mode: manual
-      simple:
-        acknowledge-mode: manual
   multirabbitmq:
     enabled: true
     connections:
       dev:
-        host: ----
-        port: 0000
-        virtual-host: ----
-        username: ----
-        password: ----
+        host: localhost
+        port: 5672
+        virtual-host: /
+        username: guest
+        password: guest
       dev2:
-        host: ----
-        port: 0000
-        virtual-host: ----
-        username: ----
-        password: ----
-      dev3:
-        host: ----
-        port: 0000
-        virtual-host: ----
-        username: ----
-        password: ----
+        host: localhost
+        port: 5673
+        virtual-host: /
+        username: guest
+        password: guest
+#      dev3:
+#        host: localhost
+#        port: 5672
+#        virtual-host: /
+#        username: guest
+#        password: guest
     default-connection: dev
