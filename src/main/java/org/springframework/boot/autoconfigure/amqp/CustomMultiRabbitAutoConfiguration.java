@@ -127,13 +127,11 @@ public class CustomMultiRabbitAutoConfiguration {
         ) throws Exception {
             MultiRabbitConnectionFactoryWrapper wrapper = new MultiRabbitConnectionFactoryWrapper();
             Map<String, RabbitProperties> propertiesMap = multiRabbitProperties != null ? multiRabbitProperties.getConnections() : Collections.emptyMap();
-            Iterator var10 = propertiesMap.entrySet().iterator();
-
-
-            var k = new PropertiesRabbitConnectionDetails(rabbitProperties);
+            Iterator<Map.Entry<String, RabbitProperties>> var10 = propertiesMap.entrySet().iterator();
 
             while (var10.hasNext()) {
-                Map.Entry<String, RabbitProperties> entry = (Map.Entry) var10.next();
+                Map.Entry<String, RabbitProperties> entry = var10.next();
+                var k = new PropertiesRabbitConnectionDetails(entry.getValue());
                 RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer = this.springFactoryCreator.rabbitConnectionFactoryBeanConfigurer(resourceLoader, k, credentialsProvider, credentialsRefreshService, sslBundles);
                 CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer = this.springFactoryCreator.rabbitConnectionFactoryConfigurer(k, connectionNameStrategy);
                 CachingConnectionFactory connectionFactory = this.springFactoryCreator.rabbitConnectionFactory(rabbitConnectionFactoryBeanConfigurer, rabbitCachingConnectionFactoryConfigurer, connectionFactoryCustomizer);
@@ -148,10 +146,11 @@ public class CustomMultiRabbitAutoConfiguration {
                 CustomMultiRabbitAutoConfiguration.LOGGER.error(msg);
                 throw new IllegalArgumentException(msg);
             } else {
+                var k = new PropertiesRabbitConnectionDetails(multiRabbitProperties != null ? multiRabbitProperties.getConnections().get(defaultConnectionFactoryKey) : null);
                 RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer = this.springFactoryCreator.rabbitConnectionFactoryBeanConfigurer(resourceLoader, k, credentialsProvider, credentialsRefreshService, sslBundles);
                 CachingConnectionFactoryConfigurer rabbitCachingConnectionFactoryConfigurer = this.springFactoryCreator.rabbitConnectionFactoryConfigurer(k, connectionNameStrategy);
                 ConnectionFactory defaultConnectionFactory = StringUtils.hasText(defaultConnectionFactoryKey) ? (ConnectionFactory) wrapper.getConnectionFactories().get(defaultConnectionFactoryKey) : this.springFactoryCreator.rabbitConnectionFactory(rabbitConnectionFactoryBeanConfigurer, rabbitCachingConnectionFactoryConfigurer, connectionFactoryCustomizer);
-                wrapper.setDefaultConnectionFactory((ConnectionFactory) defaultConnectionFactory);
+                wrapper.setDefaultConnectionFactory(defaultConnectionFactory);
                 return wrapper;
             }
         }

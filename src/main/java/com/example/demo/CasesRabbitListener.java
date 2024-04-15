@@ -18,7 +18,7 @@ class CasesRabbitListener {
             autoStartup = "true",
             priority = "100",
             ackMode = "MANUAL",
-            queues = "dw_queue_1"
+            queues = "dw_q_1"
     )
     Mono<Void> listenDev(final Message message) {
         return null;
@@ -26,29 +26,15 @@ class CasesRabbitListener {
 
     @RabbitListener(
             id = "dev2",
-            autoStartup = "false",
+            autoStartup = "true",
             priority = "100",
             containerFactory = "dev2",
             ackMode = "MANUAL",
-            queues = "dw_test_2"
-
+            queues = "dw_q_2"
     )
     Mono<Void> listenDev2(final Message message) {
         return null;
     }
-
-
-//    @RabbitListener(
-//            id = "dev3",
-//            autoStartup = "false",
-//            priority = "100",
-////            containerFactory = "dev3",
-//            ackMode = "MANUAL"
-//
-//    )
-//    Mono<Void> listenDev3(final Message message) {
-//        return null;
-//    }
 
 
 }
