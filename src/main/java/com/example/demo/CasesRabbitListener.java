@@ -27,7 +27,7 @@ class CasesRabbitListener {
             id = "dev2",
             autoStartup = "true",
             priority = "100",
-            containerFactory = "dev2",
+//            containerFactory = "dev2",
             ackMode = "MANUAL"
 
     )
@@ -40,7 +40,7 @@ class CasesRabbitListener {
             id = "dev3",
             autoStartup = "true",
             priority = "100",
-            containerFactory = "dev3",
+//            containerFactory = "dev3",
             ackMode = "MANUAL"
 
     )
