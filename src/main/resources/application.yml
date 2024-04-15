@@ -13,21 +13,15 @@ spring:
     enabled: true
     connections:
       dev:
-        host: ----
-        port: 0000
-        virtual-host: ----
-        username: ----
-        password: ----
+        host: localhost
+        port: 5672
+        virtual-host: /
+        username: guest
+        password: guest
       dev2:
-        host: ----
-        port: 0000
-        virtual-host: ----
-        username: ----
-        password: ----
-      dev3:
-        host: ----
-        port: 0000
-        virtual-host: ----
-        username: ----
-        password: ----
+        host: localhost
+        port: 5673
+        virtual-host: /
+        username: guest
+        password: guest
     default-connection: dev
