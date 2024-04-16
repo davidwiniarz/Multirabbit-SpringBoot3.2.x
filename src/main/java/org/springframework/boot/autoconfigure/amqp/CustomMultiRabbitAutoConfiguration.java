@@ -25,7 +25,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 
@@ -40,40 +43,17 @@ import static org.springframework.boot.autoconfigure.amqp.MultiRabbitConstants.R
 @Import({MultiRabbitListenerConfigurationSelector.class, RabbitAutoConfiguration.class})
 public class CustomMultiRabbitAutoConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomMultiRabbitAutoConfiguration.class);
-
-    /**
-     * Returns a {@link RabbitAutoConfiguration.RabbitConnectionFactoryCreator}.
-     *
-     * @return a {@link RabbitAutoConfiguration.RabbitConnectionFactoryCreator}.
-     */
-    @Primary
-    @Bean(MultiRabbitConstants.CONNECTION_FACTORY_CREATOR_BEAN_NAME)
-    @ConditionalOnProperty(prefix = "spring.multirabbitmq", name = "enabled", havingValue = "true")
-    RabbitAutoConfiguration.RabbitConnectionFactoryCreator rabbitConnectionFactoryCreator(RabbitProperties rabbitProperties) {
-        return new RabbitAutoConfiguration.RabbitConnectionFactoryCreator(rabbitProperties);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiRabbitAutoConfiguration.class);
 
     /**
      * Class to set up multirabbit beans.
      */
     @Configuration
-    @DependsOn(MultiRabbitConstants.CONNECTION_FACTORY_CREATOR_BEAN_NAME)
     @ConditionalOnProperty(prefix = "spring.multirabbitmq", name = "enabled", havingValue = "true")
     protected static class MultiRabbitConnectionFactoryCreator implements BeanFactoryAware, ApplicationContextAware {
 
         private ConfigurableListableBeanFactory beanFactory;
         private ApplicationContext applicationContext;
-        private final RabbitAutoConfiguration.RabbitConnectionFactoryCreator springFactoryCreator;
-
-        /**
-         * Creates a new MultiRabbitConnectionFactoryCreator for instantiation of beans.
-         *
-         * @param springFactoryCreator The RabbitConnectionFactoryCreator.
-         */
-        MultiRabbitConnectionFactoryCreator(final RabbitAutoConfiguration.RabbitConnectionFactoryCreator springFactoryCreator) {
-            this.springFactoryCreator = springFactoryCreator;
-        }
 
         /**
          * Creates the bean of the wrapper.
@@ -182,6 +162,7 @@ public class CustomMultiRabbitAutoConfiguration {
                     : Collections.emptyMap();
 
             for (Map.Entry<String, RabbitProperties> entry : propertiesMap.entrySet()) {
+                RabbitAutoConfiguration.RabbitConnectionFactoryCreator springFactoryCreator = new RabbitAutoConfiguration.RabbitConnectionFactoryCreator(entry.getValue());
                 final RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer =
                         springFactoryCreator.rabbitConnectionFactoryBeanConfigurer(resourceLoader, new PropertiesRabbitConnectionDetails(entry.getValue()),
                                 credentialsProvider, credentialsRefreshService, sslBundles);
@@ -209,6 +190,8 @@ public class CustomMultiRabbitAutoConfiguration {
                 LOGGER.error(msg);
                 throw new IllegalArgumentException(msg);
             }
+
+            RabbitAutoConfiguration.RabbitConnectionFactoryCreator springFactoryCreator = new RabbitAutoConfiguration.RabbitConnectionFactoryCreator(rabbitProperties);
 
             final RabbitConnectionFactoryBeanConfigurer rabbitConnectionFactoryBeanConfigurer = springFactoryCreator
                     .rabbitConnectionFactoryBeanConfigurer(resourceLoader, new PropertiesRabbitConnectionDetails(rabbitProperties),

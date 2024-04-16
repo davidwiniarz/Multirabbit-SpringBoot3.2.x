@@ -3,6 +3,7 @@ package com.example.demo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -16,7 +17,7 @@ class CasesRabbitListener {
     @RabbitListener(
             id = "dev",
             autoStartup = "true",
-            queues = "test_queue"
+            queuesToDeclare = {@Queue("dw_q_2")}
     )
     Mono<Void> listenDev(final Message message) {
         return null;
@@ -24,9 +25,9 @@ class CasesRabbitListener {
 
     @RabbitListener(
             id = "dev2",
-            autoStartup = "false",
+//            autoStartup = "false",
             containerFactory = "dev2",
-            queues = "dw_q_2"
+            queues = "test_queue"
 
     )
     Mono<Void> listenDev2(final Message message) {
