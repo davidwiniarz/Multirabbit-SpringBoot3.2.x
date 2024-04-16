@@ -38,9 +38,9 @@ import static org.springframework.boot.autoconfigure.amqp.MultiRabbitConstants.R
 @ConditionalOnClass({RabbitTemplate.class, Channel.class})
 @EnableConfigurationProperties({RabbitProperties.class, MultiRabbitProperties.class})
 @Import({MultiRabbitListenerConfigurationSelector.class, RabbitAutoConfiguration.class})
-public class WorkingAutoConfiguration {
+public class CustomMultiRabbitAutoConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MultiRabbitAutoConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomMultiRabbitAutoConfiguration.class);
 
     /**
      * Returns a {@link RabbitAutoConfiguration.RabbitConnectionFactoryCreator}.
@@ -50,7 +50,7 @@ public class WorkingAutoConfiguration {
     @Primary
     @Bean(MultiRabbitConstants.CONNECTION_FACTORY_CREATOR_BEAN_NAME)
     @ConditionalOnProperty(prefix = "spring.multirabbitmq", name = "enabled", havingValue = "true")
-    public RabbitAutoConfiguration.RabbitConnectionFactoryCreator rabbitConnectionFactoryCreator(RabbitProperties rabbitProperties) {
+    RabbitAutoConfiguration.RabbitConnectionFactoryCreator rabbitConnectionFactoryCreator(RabbitProperties rabbitProperties) {
         return new RabbitAutoConfiguration.RabbitConnectionFactoryCreator(rabbitProperties);
     }
 
