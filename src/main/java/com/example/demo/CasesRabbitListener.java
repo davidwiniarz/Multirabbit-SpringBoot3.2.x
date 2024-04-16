@@ -2,6 +2,9 @@ package com.example.demo;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -10,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 
 @Component
+@Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class CasesRabbitListener {
 
@@ -19,8 +23,11 @@ class CasesRabbitListener {
             autoStartup = "true",
             queuesToDeclare = {@Queue("test_queue")}
     )
-    Mono<Void> listenDev(final Message message) {
-        return null;
+    Mono<Void> listenDev(final Message message) throws JSONException {
+        var messageBody = new String(message.getBody());
+        var jsonBody = new JSONObject(messageBody);
+        log.info(jsonBody.toString());
+        return Mono.empty();
     }
 
     @RabbitListener(
