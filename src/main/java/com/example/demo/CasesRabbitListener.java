@@ -17,7 +17,7 @@ class CasesRabbitListener {
     @RabbitListener(
             id = "dev",
             autoStartup = "true",
-            queuesToDeclare = {@Queue("dw_q_2")}
+            queuesToDeclare = {@Queue("test_queue")}
     )
     Mono<Void> listenDev(final Message message) {
         return null;
@@ -25,7 +25,7 @@ class CasesRabbitListener {
 
     @RabbitListener(
             id = "dev2",
-//            autoStartup = "false",
+            autoStartup = "false",
             containerFactory = "dev2",
             queues = "test_queue"
 
