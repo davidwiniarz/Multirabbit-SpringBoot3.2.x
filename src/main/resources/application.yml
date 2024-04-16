@@ -18,10 +18,24 @@ spring:
         virtual-host: /
         username: guest
         password: guest
+        listener:
+          direct:
+            acknowledge-mode: manual
+          simple:
+            acknowledge-mode: manual
       dev2:
         host: localhost
         port: 5673
         virtual-host: /
         username: guest
         password: guest
+        listener:
+          direct:
+            acknowledge-mode: manual
+          simple:
+            acknowledge-mode: manual
     default-connection: dev
+
+logging:
+  level:
+    org.springframework.context.support: OFF
