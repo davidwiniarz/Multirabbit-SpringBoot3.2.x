@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.autoconfigure.amqp.CustomMultiRabbitAutoConfiguration;
+import org.springframework.boot.autoconfigure.amqp.MultiRabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
